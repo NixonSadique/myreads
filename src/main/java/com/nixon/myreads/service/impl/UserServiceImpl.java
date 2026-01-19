@@ -8,6 +8,7 @@ import com.nixon.myreads.exception.EntityNotFoundException;
 import com.nixon.myreads.repository.UserRepository;
 import com.nixon.myreads.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public String createUser(UserRequestDTO requestDTO) {
@@ -30,7 +32,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setEmail(requestDTO.email().toLowerCase());
         user.setUsername(requestDTO.username().toLowerCase());
-        user.setPassword(requestDTO.password());
+        user.setPassword(passwordEncoder.encode(requestDTO.password()));
         repository.save(user);
         return "User created successfuly!";
     }
