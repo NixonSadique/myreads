@@ -5,7 +5,7 @@ COPY . .
 RUN apt-get install maven -y
 RUN mvn clean install
 
-FROM openjdk:21-slim
+FROM openjdk:21
 COPY --from=build /target/*.jar ./myreads.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "myreads.jar"]
