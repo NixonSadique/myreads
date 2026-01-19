@@ -40,5 +40,15 @@ public class APIExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<StandardErrorResponse> handleException(Exception e, HttpServletRequest request) {
+        StandardErrorResponse response = new StandardErrorResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR.value(),
+          OffsetDateTime.now(),
+                request.getServletPath(),
+                e.getMessage()
+        );
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     
 }

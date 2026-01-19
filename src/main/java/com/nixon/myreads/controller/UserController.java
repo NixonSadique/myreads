@@ -3,6 +3,7 @@ package com.nixon.myreads.controller;
 import com.nixon.myreads.dto.request.UserRequestDTO;
 import com.nixon.myreads.dto.response.UserResponseDTO;
 import com.nixon.myreads.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/myreads/user")
 @RequiredArgsConstructor
+@Tag(name = "1.User Controller", description = "Contains all the endpoints regarding the user creation")
 public class UserController {
     private final UserService service;
 

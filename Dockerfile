@@ -1,11 +1,10 @@
-FROM ubuntu:latest AS build
-RUN apt-get update
-RUN apt-get install openjdk-21-jdk -y
+FROM maven:3.9.6-eclipse-temurin-21 AS build
+WORKDIR /app
 COPY . .
-RUN apt-get install maven -y
-RUN mvn clean install
+RUN mvn clean package -DskipTests
 
-FROM openjdk:21
-COPY --from=build /target/*.jar ./myreads.jar
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+COPY --from=build /app/target/*.jar myreads.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "myreads.jar"]

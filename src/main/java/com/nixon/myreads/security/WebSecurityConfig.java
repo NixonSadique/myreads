@@ -40,12 +40,12 @@ public class WebSecurityConfig {
                                 .requestMatchers("/error").permitAll()
                                 .requestMatchers(POST, "/myreads/auth/login").permitAll()
                                 .requestMatchers(GET, "/myreads/books/**").permitAll()
-                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**" , "/swagger-ui/**").permitAll()
                                 .anyRequest().authenticated()
                 ).sessionManagement(
                         sessionManagementConfig -> sessionManagementConfig.sessionCreationPolicy(STATELESS)
                 )
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .addFilterBefore(jwtSecurityFilter, UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(provider)
                 .build();
