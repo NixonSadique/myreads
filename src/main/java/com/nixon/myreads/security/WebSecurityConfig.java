@@ -40,6 +40,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/error").permitAll()
                                 .requestMatchers(POST, "/myreads/auth/login").permitAll()
                                 .requestMatchers(GET, "/myreads/books/**").permitAll()
+                                .requestMatchers("/swagger-ui/**").permitAll()
                                 .anyRequest().authenticated()
                 ).sessionManagement(
                         sessionManagementConfig -> sessionManagementConfig.sessionCreationPolicy(STATELESS)
