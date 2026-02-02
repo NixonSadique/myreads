@@ -10,8 +10,6 @@ import java.util.List;
 public interface BookProgressRepository extends JpaRepository<BookProgress, Long> {
     Boolean existsBookById(Long id);
 
-    List<BookProgress> findByBookId(Long bookId);
-
     List<BookProgress> findByUserId(Long bookId);
 
 }

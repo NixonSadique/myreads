@@ -4,9 +4,7 @@ import com.nixon.myreads.dto.request.BookProgressRequestDTO;
 import com.nixon.myreads.dto.response.BookProgressResponseDTO;
 import com.nixon.myreads.dto.response.BookResponseDTO;
 import com.nixon.myreads.dto.response.UserResponseDTO;
-import com.nixon.myreads.entity.Book;
 import com.nixon.myreads.entity.BookProgress;
-import com.nixon.myreads.entity.User;
 import com.nixon.myreads.exception.BadRequestException;
 import com.nixon.myreads.exception.EntityNotFoundException;
 import com.nixon.myreads.repository.BookProgressRepository;
@@ -15,6 +13,8 @@ import com.nixon.myreads.repository.UserRepository;
 import com.nixon.myreads.service.BookProgressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -63,7 +63,7 @@ public class BookProgressServiceImpl implements BookProgressService {
         var progress = progressRepository.findById(id).orElseThrow();
         progress.setCompletion(completion);
         progressRepository.save(progress);
-        return "Update complete. The completion for" + progress.getBook().getTitle() + "is at:" + completion +"%.";
+        return "Update complete. The completion for" + progress.getBook().getTitle() + "is at:" + completion + "%.";
     }
 
     @Override
@@ -75,18 +75,32 @@ public class BookProgressServiceImpl implements BookProgressService {
 
 
         BookResponseDTO book = new BookResponseDTO(progress.getBook().getId(), progress.getBook().getTitle(), progress.getBook().getImage(), null);
-        UserResponseDTO user = new UserResponseDTO(progress.getUser().getId(),progress.getUser().getEmail(),progress.getUser().getUsername());
+        UserResponseDTO user = new UserResponseDTO(progress.getUser().getId(), progress.getUser().getEmail(), progress.getUser().getUsername());
 
         return new BookProgressResponseDTO(progress.getId(), progress.getCompletion(), user, book);
     }
 
     @Override
-    public UserResponseDTO getUserByProgressId(Long id) {
-        return null;
+    public List<BookProgressResponseDTO> getUserProgresses(Long id) {
+
+        return progressRepository.findByUserId(id).stream().map(
+                bookProgress -> new BookProgressResponseDTO(
+                        bookProgress.getId(),
+                        bookProgress.getCompletion(),
+                        new UserResponseDTO(
+                                bookProgress.getUser().getId(),
+                                bookProgress.getUser().getEmail(),
+                                bookProgress.getUser().getUsername()
+                        ),
+                        new BookResponseDTO(
+                                bookProgress.getBook().getId(),
+                                bookProgress.getBook().getTitle(),
+                                bookProgress.getBook().getImage(),
+                                null
+                        )
+                )
+        ).toList();
     }
 
-    @Override
-    public BookResponseDTO getBookByProgressId(Long id) {
-        return null;
-    }
+
 }

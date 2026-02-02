@@ -31,7 +31,7 @@ public class BigBooksServiceImpl implements BigBooksService {
 
 
         BigBookResponse apiResponse = restTemplate.getForObject(
-                baseUrl.concat("search-books?number=100" +
+                baseUrl.concat("search-books?number=20" +
                         "&api-key=" + API_KEY +
                         "&query=" + query
                 ),
@@ -68,7 +68,7 @@ public class BigBooksServiceImpl implements BigBooksService {
     @Override
     public List<AuthorsResponseDTO> searchAuthors(String query) {
         BigAuthorsResponse apiResponse = restTemplate.getForObject(
-                baseUrl.concat("search-authors?number=100" +
+                baseUrl.concat("search-authors?number=20" +
                         "&api-key=" + API_KEY +
                         "&name=" + query
                 ),
@@ -89,7 +89,7 @@ public class BigBooksServiceImpl implements BigBooksService {
     @Override
     public List<BookResponseDTO> getSimilarBooks(int id) {
         SimilarBooksResponse apiResponse = restTemplate.getForObject(
-                baseUrl.concat(id + "/similar?api-key=" + API_KEY + "&number=100"), SimilarBooksResponse.class);
+                baseUrl.concat(id + "/similar?api-key=" + API_KEY + "&number=20"), SimilarBooksResponse.class);
 
         List<BookResponseDTO> responseDTO = new ArrayList<>();
         for (int i = 0; i < apiResponse.similar_books().size(); i++) {

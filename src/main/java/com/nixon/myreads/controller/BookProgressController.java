@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/myreads/progress")
 @RequiredArgsConstructor
@@ -28,18 +30,13 @@ public class BookProgressController {
         return new ResponseEntity<>(service.getBookProgressById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/get/book/{id}")
-    ResponseEntity<BookResponseDTO> getBookByProgressId(@PathVariable Long id){
-        return new ResponseEntity<>(service.getBookByProgressId(id), HttpStatus.OK);
-    }
-
-    @GetMapping("/get/user/{id}")
-    ResponseEntity<UserResponseDTO> getUserByProgressId(@PathVariable Long id){
-        return new ResponseEntity<>(service.getUserByProgressId(id), HttpStatus.OK);
-    }
-
     @PutMapping("/update/{id}{completion}")
     ResponseEntity<String> updateProgress(@RequestParam Long id, @RequestParam double completion){
         return new ResponseEntity<>(service.updateCompletion(id, completion),  HttpStatus.OK);
+    }
+
+    @GetMapping("/get/user/{id}")
+    ResponseEntity<List<BookProgressResponseDTO>> getUserProgresses(@PathVariable Long id){
+        return new ResponseEntity<>(service.getUserProgresses(id), HttpStatus.OK);
     }
 }

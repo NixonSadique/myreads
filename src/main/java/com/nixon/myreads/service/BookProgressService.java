@@ -5,6 +5,8 @@ import com.nixon.myreads.dto.response.BookProgressResponseDTO;
 import com.nixon.myreads.dto.response.BookResponseDTO;
 import com.nixon.myreads.dto.response.UserResponseDTO;
 
+import java.util.List;
+
 public interface BookProgressService {
     public String createProgress(BookProgressRequestDTO progressRequestDTO);
 
@@ -12,7 +14,5 @@ public interface BookProgressService {
 
     public BookProgressResponseDTO getBookProgressById(Long id);
 
-        public UserResponseDTO getUserByProgressId(Long id);
-
-    public BookResponseDTO getBookByProgressId(Long id);
+    List<BookProgressResponseDTO> getUserProgresses(Long id);
 }
