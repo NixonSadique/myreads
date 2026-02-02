@@ -3,7 +3,6 @@ package com.nixon.myreads.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.http.HttpMethod.GET;
@@ -40,12 +40,12 @@ public class WebSecurityConfig {
                                 .requestMatchers("/error").permitAll()
                                 .requestMatchers(POST, "/myreads/auth/login").permitAll()
                                 .requestMatchers(GET, "/myreads/books/**").permitAll()
-                                .requestMatchers("/v3/api-docs/**" , "/swagger-ui/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                                 .anyRequest().authenticated()
                 ).sessionManagement(
                         sessionManagementConfig -> sessionManagementConfig.sessionCreationPolicy(STATELESS)
                 )
-//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .addFilterBefore(jwtSecurityFilter, UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(provider)
                 .build();
@@ -54,11 +54,13 @@ public class WebSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("/**"));
-        configuration.setAllowedMethods(List.of("GET", "POST"));
+        configuration.setAllowedOriginPatterns(List.of("*"));
+        configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
-        configuration.setExposedHeaders(List.of("Authorization"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization",
+                "X-Get-Header", "Access-Control-Allow-Origin",
+                "Access-Control-Allow-Credentials"));
         configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

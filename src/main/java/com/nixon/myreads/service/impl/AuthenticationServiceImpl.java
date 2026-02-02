@@ -2,6 +2,7 @@ package com.nixon.myreads.service.impl;
 
 import com.nixon.myreads.dto.request.AuthenticationRequest;
 import com.nixon.myreads.dto.response.TokenResponse;
+import com.nixon.myreads.dto.response.UserResponseDTO;
 import com.nixon.myreads.entity.Token;
 import com.nixon.myreads.entity.User;
 import com.nixon.myreads.exception.EntityNotFoundException;
@@ -45,6 +46,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         tokenRepository.save(token);
 
-        return new TokenResponse(accessToken, token.getExpiresAt());
+        return new TokenResponse(accessToken, token.getExpiresAt(), new UserResponseDTO(
+                token.getUser().getId(),
+                token.getUser().getEmail(),
+                token.getUser().getUsername()
+        ));
     }
 }
