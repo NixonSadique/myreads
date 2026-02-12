@@ -29,19 +29,19 @@ public class BooksController {
         return ResponseEntity.ok(bigBooksService.searchBooks(query));
     }
 
-    @GetMapping("/authors/{query}")
-    ResponseEntity<List<AuthorsResponseDTO>> searchAuthors(@PathVariable String query) {
-        return ResponseEntity.ok(bigBooksService.searchAuthors(query));
-    }
-
     @GetMapping("/similar/{id}")
-    ResponseEntity<List<BookResponseDTO>> searchAuthors(@PathVariable int id) {
+    ResponseEntity<List<BookResponseDTO>> searchSimilarBooks(@PathVariable Long id) {
         return ResponseEntity.ok(bigBooksService.getSimilarBooks(id));
     }
 
     @GetMapping("/get/{title}")
     ResponseEntity<List<BookResponseDTO>> getBook(@PathVariable String title) {
         return new ResponseEntity<>(booksService.getBook(title), HttpStatus.OK);
+    }
+
+    @GetMapping("/get/author/{id}")
+    ResponseEntity<List<BookResponseDTO>> getBooksByAuthor(@PathVariable Long id) {
+        return new ResponseEntity<>(booksService.getBooksByAuthor(id), HttpStatus.OK);
     }
 
 

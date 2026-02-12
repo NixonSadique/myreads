@@ -5,5 +5,7 @@ import com.nixon.myreads.dto.response.BookResponseDTO;
 import java.util.List;
 
 public interface BooksService {
-    public List<BookResponseDTO> getBook(String word);
+    List<BookResponseDTO> getBook(String word);
+
+    List<BookResponseDTO> getBooksByAuthor(Long id);
 }

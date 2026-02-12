@@ -8,7 +8,7 @@ import java.util.List;
 public interface BigBooksService {
     List<BookResponseDTO> searchBooks(String query);
     List<AuthorsResponseDTO> searchAuthors(String query);
-    List<BookResponseDTO> getSimilarBooks(int id);
+    List<BookResponseDTO> getSimilarBooks(Long id);
 
 
 }

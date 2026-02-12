@@ -6,6 +6,7 @@ import com.nixon.myreads.dto.response.BookResponseDTO;
 import com.nixon.myreads.dto.response.UserResponseDTO;
 import com.nixon.myreads.service.BookProgressService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/myreads/progress")
 @RequiredArgsConstructor
-@Tag(name = "4.Progress Controller", description = "Contains all the endpoints regarding the Progress on the books")
+@Tag(name = "5.Progress Controller", description = "Contains all the endpoints regarding the Progress on the books")
 public class BookProgressController {
     private final BookProgressService service;
 
     @PostMapping("/create")
-    ResponseEntity<String> createProgress(@RequestBody BookProgressRequestDTO requestDTO){
+    ResponseEntity<String> createProgress(@Valid @RequestBody BookProgressRequestDTO requestDTO){
         return new ResponseEntity<>(service.createProgress(requestDTO), HttpStatus.CREATED);
     }
 

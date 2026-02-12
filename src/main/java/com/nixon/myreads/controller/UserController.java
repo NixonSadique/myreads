@@ -4,6 +4,7 @@ import com.nixon.myreads.dto.request.UserRequestDTO;
 import com.nixon.myreads.dto.response.UserResponseDTO;
 import com.nixon.myreads.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class UserController {
     private final UserService service;
 
     @PostMapping("/create")
-    ResponseEntity<String> createUser(@RequestBody UserRequestDTO request){
+    ResponseEntity<String> createUser(@Valid @RequestBody UserRequestDTO request){
         return new ResponseEntity<>(service.createUser(request), HttpStatus.CREATED);
     }
 

@@ -6,11 +6,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.OffsetDateTime;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -23,7 +27,8 @@ public class APIExceptionHandler {
                         HttpStatus.BAD_REQUEST.value(),
                         OffsetDateTime.now(),
                         request.getServletPath(),
-                        badRequestException.getMessage()
+                        badRequestException.getMessage(),
+                        null
                 );
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -35,7 +40,7 @@ public class APIExceptionHandler {
                         HttpStatus.NOT_FOUND.value(),
                         OffsetDateTime.now(),
                         request.getServletPath(),
-                        e.getMessage()
+                        e.getMessage(), null
                 );
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
@@ -43,12 +48,29 @@ public class APIExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<StandardErrorResponse> handleException(Exception e, HttpServletRequest request) {
         StandardErrorResponse response = new StandardErrorResponse(
-          HttpStatus.INTERNAL_SERVER_ERROR.value(),
-          OffsetDateTime.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                OffsetDateTime.now(),
                 request.getServletPath(),
-                e.getMessage()
+                e.getMessage(), null
         );
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<StandardErrorResponse> handleException(MethodArgumentNotValidException exception, HttpServletRequest request) {
+        List<ValidationError> errors = new ArrayList<>();
+        for (FieldError error : exception.getBindingResult().getFieldErrors()) {
+            errors.add(new ValidationError(error.getField(), error.getDefaultMessage()));
+        }
+        StandardErrorResponse response = new StandardErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                OffsetDateTime.now(),
+                request.getServletPath(),
+                "Argument validation failed",errors
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+
 }
