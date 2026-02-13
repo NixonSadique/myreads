@@ -22,7 +22,11 @@ public class Book {
 
     String image;
 
-    @OneToMany()
-    @JoinTable(name = "author_id")
+    @ManyToMany
+    @JoinTable(
+            name = "book_author",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
     List<Author> author;
 }
