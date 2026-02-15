@@ -3,6 +3,7 @@ package com.nixon.myreads.service.impl;
 import com.nixon.myreads.dto.request.UserRequestDTO;
 import com.nixon.myreads.dto.response.UserResponseDTO;
 import com.nixon.myreads.entity.User;
+import com.nixon.myreads.entity.enums.Role;
 import com.nixon.myreads.exception.BadRequestException;
 import com.nixon.myreads.exception.EntityNotFoundException;
 import com.nixon.myreads.repository.UserRepository;
@@ -33,8 +34,9 @@ public class UserServiceImpl implements UserService {
         user.setEmail(requestDTO.email().toLowerCase());
         user.setUsername(requestDTO.username().toLowerCase());
         user.setPassword(passwordEncoder.encode(requestDTO.password()));
+        user.setRole(Role.USER);
         repository.save(user);
-        return "User created successfuly!";
+        return "User created successfully!";
     }
 
     @Override

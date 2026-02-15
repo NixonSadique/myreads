@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/myreads/author")
 @RequiredArgsConstructor
-@Tag(name = "4.Books Controller", description = "Contains all the endpoints regarding the Authors")
+@Tag(name = "4.Author Controller", description = "Contains all the endpoints regarding the Authors")
 public class AuthorController {
 
     private final BigBooksService bigBooksService;

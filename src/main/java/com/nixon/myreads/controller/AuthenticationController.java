@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/myreads/auth")
-@Tag(name = "2.Authentication Controller", description = "Contains all the endpoints regarding the user creation")
+@Tag(name = "2.Authentication Controller", description = "Contains all the endpoints regarding the user Authentication")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;

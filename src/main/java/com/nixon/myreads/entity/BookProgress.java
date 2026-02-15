@@ -16,16 +16,16 @@ public class BookProgress {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Column(length = 100)
-    Double completion;
+    private Double completion;
 
     @ManyToOne
     @JoinColumn(name = "book_id")
-    Book book;
+    private Book book;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    User user;
+    private User user;
 }

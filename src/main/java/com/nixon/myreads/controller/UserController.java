@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,11 +25,13 @@ public class UserController {
         return new ResponseEntity<>(service.createUser(request), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get/{id}")
     ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id){
         return new ResponseEntity<>(service.getUserByID(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get/")
     ResponseEntity<List<UserResponseDTO>> getAllUsers(){
         return new ResponseEntity<>(service.getAllUsers(), HttpStatus.OK);

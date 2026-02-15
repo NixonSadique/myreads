@@ -15,12 +15,12 @@ import java.util.List;
 @Setter
 public class Book {
     @Id
-    Long id;
+    private Long id;
 
     @Column(nullable = false)
-    String title;
+    private String title;
 
-    String image;
+    private String image;
 
     @ManyToMany
     @JoinTable(
@@ -28,5 +28,5 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
-    List<Author> author;
+    private List<Author> author;
 }
