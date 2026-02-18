@@ -1,6 +1,7 @@
 package com.nixon.myreads.service.impl;
 
 import com.nixon.myreads.dto.request.UserRequestDTO;
+import com.nixon.myreads.dto.response.StatsResponse;
 import com.nixon.myreads.dto.response.UserResponseDTO;
 import com.nixon.myreads.entity.User;
 import com.nixon.myreads.entity.enums.Role;
@@ -42,7 +43,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserResponseDTO> getAllUsers() {
         return repository.findAll().stream().map(
-                user -> new UserResponseDTO(user.getId(), user.getEmail(), user.getUsername())
+                user -> new UserResponseDTO(user.getId(), user.getEmail(), user.getUsername(), user.getRole().name())
         ).toList();
     }
 
@@ -52,6 +53,29 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(
                         () -> new EntityNotFoundException("User with id " + id + " not found")
                 );
-        return new UserResponseDTO(user.getId(), user.getEmail(), user.getUsername());
+        return new UserResponseDTO(user.getId(), user.getEmail(), user.getUsername(), user.getRole().name());
+    }
+
+    @Override
+    public String deleteById(Long id) {
+        repository.deleteById(id);
+        return "User Deleted Successfully!";
+    }
+
+    @Override
+    public String userToAdmin(Long id) {
+        User user = repository.findById(id).orElseThrow();
+        user.setRole(Role.ADMIN);
+        repository.save(user);
+
+        return "User to Admin Successfully!";
+    }
+
+    @Override
+    public StatsResponse getStats() {
+        return new StatsResponse(
+                repository.count(),
+                repository.countByRole(Role.ADMIN),
+                repository.countByRole(Role.USER));
     }
 }

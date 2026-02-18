@@ -1,6 +1,7 @@
 package com.nixon.myreads.controller;
 
 import com.nixon.myreads.dto.request.UserRequestDTO;
+import com.nixon.myreads.dto.response.StatsResponse;
 import com.nixon.myreads.dto.response.UserResponseDTO;
 import com.nixon.myreads.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,9 +33,27 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/get/")
+    @GetMapping("/get")
     ResponseEntity<List<UserResponseDTO>> getAllUsers(){
         return new ResponseEntity<>(service.getAllUsers(), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/delete/{id}")
+    ResponseEntity<String> deleteUser(@PathVariable Long id){
+        return new ResponseEntity<>(service.deleteById(id), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/update/admin/{id}")
+    ResponseEntity<String> makeUserAdmin(@PathVariable Long id){
+        return new ResponseEntity<>(service.userToAdmin(id), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/stats")
+    ResponseEntity<StatsResponse> getStats(){
+        return new ResponseEntity<>(service.getStats(), HttpStatus.OK);
     }
 
 

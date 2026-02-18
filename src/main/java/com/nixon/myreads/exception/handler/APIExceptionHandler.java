@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.OffsetDateTime;
@@ -21,6 +22,7 @@ import java.util.List;
 public class APIExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<StandardErrorResponse> handleBadRequest(BadRequestException badRequestException, HttpServletRequest request) {
         StandardErrorResponse errorResponse = new StandardErrorResponse
                 (
@@ -34,6 +36,7 @@ public class APIExceptionHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<StandardErrorResponse> handleEntityNotFound(EntityNotFoundException e, HttpServletRequest request) {
         StandardErrorResponse errorResponse = new StandardErrorResponse
                 (
@@ -46,6 +49,7 @@ public class APIExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<StandardErrorResponse> handleException(Exception e, HttpServletRequest request) {
         StandardErrorResponse response = new StandardErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),

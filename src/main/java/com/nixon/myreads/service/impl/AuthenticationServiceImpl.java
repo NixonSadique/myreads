@@ -49,7 +49,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return new TokenResponse(accessToken, token.getExpiresAt(), new UserResponseDTO(
                 token.getUser().getId(),
                 token.getUser().getEmail(),
-                token.getUser().getUsername()
+                token.getUser().getUsername(),
+                token.getUser().getRole().name()
         ));
     }
 }

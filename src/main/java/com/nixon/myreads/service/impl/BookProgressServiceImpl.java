@@ -1,6 +1,8 @@
 package com.nixon.myreads.service.impl;
 
+import com.nixon.myreads.client.response.AuthorsResponse;
 import com.nixon.myreads.dto.request.BookProgressRequestDTO;
+import com.nixon.myreads.dto.request.ProgressUpdateRequestDTO;
 import com.nixon.myreads.dto.response.BookProgressResponseDTO;
 import com.nixon.myreads.dto.response.BookResponseDTO;
 import com.nixon.myreads.dto.response.UserResponseDTO;
@@ -59,11 +61,20 @@ public class BookProgressServiceImpl implements BookProgressService {
     }
 
     @Override
-    public String updateCompletion(Long id, Double completion) {
-        var progress = progressRepository.findById(id).orElseThrow();
-        progress.setCompletion(completion);
-        progressRepository.save(progress);
-        return "Update complete. The completion for" + progress.getBook().getTitle() + "is at:" + completion + "%.";
+    public String updateCompletion(ProgressUpdateRequestDTO request) {
+
+        List<BookProgress> userProgresses = progressRepository.findByUserId(request.userId());
+
+
+        for (BookProgress progress : userProgresses) {
+            if (progress.getId().equals(request.progressId())) {
+                progress.setCompletion(request.completion());
+                progressRepository.save(progress);
+                return "Update complete for" + progress.getBook().getTitle();
+            }
+        }
+
+        return "User does not have any progress to update";
     }
 
     @Override
@@ -75,7 +86,7 @@ public class BookProgressServiceImpl implements BookProgressService {
 
 
         BookResponseDTO book = new BookResponseDTO(progress.getBook().getId(), progress.getBook().getTitle(), progress.getBook().getImage(), null);
-        UserResponseDTO user = new UserResponseDTO(progress.getUser().getId(), progress.getUser().getEmail(), progress.getUser().getUsername());
+        UserResponseDTO user = new UserResponseDTO(progress.getUser().getId(), progress.getUser().getEmail(), progress.getUser().getUsername(), null);
 
         return new BookProgressResponseDTO(progress.getId(), progress.getCompletion(), user, book);
     }
@@ -90,13 +101,16 @@ public class BookProgressServiceImpl implements BookProgressService {
                         new UserResponseDTO(
                                 bookProgress.getUser().getId(),
                                 bookProgress.getUser().getEmail(),
-                                bookProgress.getUser().getUsername()
+                                bookProgress.getUser().getUsername(),
+                                bookProgress.getUser().getRole().name()
                         ),
                         new BookResponseDTO(
                                 bookProgress.getBook().getId(),
                                 bookProgress.getBook().getTitle(),
                                 bookProgress.getBook().getImage(),
-                                null
+                                bookProgress.getBook().getAuthor().stream().map(
+                                        author -> new AuthorsResponse(author.getId(), author.getName())
+                                ).toList()
                         )
                 )
         ).toList();

@@ -12,7 +12,10 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
         info = @Info(
                 title = "My Reads API",
                 description = "API for reading tracking",
-                contact = @Contact(email = "nixonsadique2005@gmail.com", url = "github.com/NixonSadique")
+                contact = @Contact(
+                        name = "Nixon Sadique Macucha",
+                        email = "nixonsadique2005@gmail.com",
+                        url = "github.com/NixonSadique")
         ),
         security = {
                 @SecurityRequirement(
@@ -22,10 +25,12 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 )
 @SecurityScheme(
         name = "Bearer Authentication",
+        description = "Go to \"/myreads/auth/login\" and login, to get your token!",
         scheme = "bearer",
         type = SecuritySchemeType.HTTP,
         bearerFormat = "JWT",
         in = SecuritySchemeIn.HEADER
 )
+
 public class OpenApiConfig {
 }

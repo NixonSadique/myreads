@@ -1,15 +1,15 @@
 package com.nixon.myreads.controller;
 
 import com.nixon.myreads.dto.request.BookProgressRequestDTO;
+import com.nixon.myreads.dto.request.ProgressUpdateRequestDTO;
 import com.nixon.myreads.dto.response.BookProgressResponseDTO;
-import com.nixon.myreads.dto.response.BookResponseDTO;
-import com.nixon.myreads.dto.response.UserResponseDTO;
 import com.nixon.myreads.service.BookProgressService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,14 +26,15 @@ public class BookProgressController {
         return new ResponseEntity<>(service.createProgress(requestDTO), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get/{id}")
     ResponseEntity<BookProgressResponseDTO> getBookProgressById(@PathVariable Long id){
         return new ResponseEntity<>(service.getBookProgressById(id), HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}{completion}")
-    ResponseEntity<String> updateProgress(@RequestParam Long id, @RequestParam double completion){
-        return new ResponseEntity<>(service.updateCompletion(id, completion),  HttpStatus.OK);
+    ResponseEntity<String> updateProgress(@RequestBody ProgressUpdateRequestDTO request){
+        return new ResponseEntity<>(service.updateCompletion(request),  HttpStatus.OK);
     }
 
     @GetMapping("/get/user/{id}")
